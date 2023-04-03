@@ -140,7 +140,8 @@ class DecoderInferenceModel:
 
     @classmethod
     def load(cls, path: str) -> DecoderInferenceModel:
-        temp = torch.load(path)
+        device = "cuda" if torch.cuda.is_available() else "cpu"
+        temp = torch.load(path, map_location=torch.device(device))
         # Just in case we change any of the class methods here, unpack the model
         # and tokenizer, and pass them into a new instance of this class.
         return cls(model=temp.model.float(), tokenizer=temp.tokenizer)
